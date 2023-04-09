@@ -32,6 +32,7 @@ int main()
 {
     uint64_t mmin, mmax, step, submin, submax, nnum;
     uint32_t thnum;
+    vector<thread> thds;
     
     printf("Min: "); scanf("%llu", &mmin);
     printf("Max: "); scanf("%llu", &mmax);
@@ -45,13 +46,12 @@ int main()
         if (i == thnum) submax = mmax;
         else submax = submin + step - 1;
 
-        thread t(check, submin, submax);
-        t.detach();
+        thds.push_back(thread(check, submin, submax));
 
         submin = submax + 1;
     }
 
-    fflush(stdin);
-    getchar();
+    for (uint32_t i = 0; i < thnum; i++)
+        thds[i].join();
     return 0;
 }
